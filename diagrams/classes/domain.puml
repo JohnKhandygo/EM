@@ -1,0 +1,56 @@
+@startuml
+'left to right direction
+hide class circle
+
+class Employee {
+  name : String
+}
+
+class Manager {
+}
+
+class Paymaster {
+}
+
+class Worker {
+}
+
+class Award {
+  employee : Employee
+  when : long
+  amount : long
+  approved : boolean
+  rejected : boolean
+  cancelled : boolean
+}
+
+class OutOfOffice {
+  employee : Employee
+  when : long
+  duration : long
+  reason : String
+  cancelled : boolean
+}
+
+class Vocation {
+  employee : Employee
+  when : long
+  duration : long
+  approved : boolean
+  rejected : boolean
+  cancelled : boolean
+}
+
+
+Award "*" -down-> "1" Employee : "owned by >"
+OutOfOffice "*" -down-> "1" Employee : "owned by >"
+Vocation "*" -down-> "1" Employee : "owned by >"
+
+Worker -up-|> Employee
+Manager -down-|> Employee
+Paymaster -down-|> Employee
+
+Employee "*" --> "0..1" Manager
+Employee "*" --> "1" Paymaster
+
+@enduml

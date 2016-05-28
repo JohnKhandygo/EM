@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="scripts/jquery.js"></script>
+
+    <script src="scripts/metro.js"></script>
+    <link href="css/metro.css" rel="stylesheet">
+    <link href="css/metro-responsive.css" rel="stylesheet">
+    <link href="css/metro-rtl.css" rel="stylesheet">
+    <link href="css/metro-schemes.css" rel="stylesheet">
+
+    <script src="scripts/engine.js"></script>
+    <script src="scripts/view.js"></script>
+    <script src="scripts/utils.js"></script>
+    <link href="css/view.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
+</head>
+<body>
+
+<div class="app-bar">
+    <a class="app-bar-element" href="...">Home</a>
+    <span class="app-bar-divider"></span>
+</div>
+
+<div id="login-form"
+     class="login-form padding20 block-shadow"
+     style="opacity: 1; transform: scale(1); transition: 0.5s;">
+    <form>
+        <h1 class="text-light">Login to service</h1>
+        <hr class="thin">
+        <br>
+        <div class="input-control text full-size" data-role="input">
+            <label for="user-login">User login:</label>
+            <input type="text" id="user-login" style="padding-right: 39px;">
+        </div>
+        <br>
+        <br>
+        <div class="input-control password full-size" data-role="input">
+            <label for="user-password">User password:</label>
+            <input type="password" id="user-password" style="padding-right: 39px;">
+        </div>
+        <br>
+        <br>
+        <div class="form-actions align-right">
+            <button id="login-button" class="button primary">Login</button>
+        </div>
+    </form>
+</div>
+
+<div class="grid">
+    <div class="row cells5">
+        <div class="cell">
+            <ul class="v-menu" style="width:100%">
+                <li class="divider"></li>
+                <li id="home" class="active">
+                    <a href="#"> Home</a>
+                </li>
+                <li id="stuff">
+                    <a href="#"> Stuff</a>
+                </li>
+                <li id="proposals">
+                    <a href="#"> Proposals</a>
+                </li>
+                <li id="news">
+                    <a href="#"> News</a>
+                </li>
+                <li class="divider"></li>
+            </ul>
+
+            <div id="propose-vocation-dialog" data-role="dialog"
+                 data-close-button="true"
+                 data-overlay="true"
+                 data-overlay-click-close="true"
+                 data-overlay-color="op-darkTeal">
+                <div id="propose-vocation-form"
+                     class="login-form padding20">
+                    <form>
+                        <h4 class="text-light">Propose Vocation</h4>
+                        <hr class="thin">
+                        <br>
+                        <div class="input-control text full-size" data-role="datepicker">
+                            <label class="text-light" for="propose-vocation-since">Since:</label>
+                            <input type="text" id="propose-vocation-since">
+                            <button class="button">
+                                <span class="fa fa-calendar"></span>
+                            </button>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="input-control text full-size" data-role="datepicker">
+                            <label class="text-light" for="propose-vocation-till">Till:</label>
+                            <input type="text" id="propose-vocation-till">
+                            <button class="button">
+                                <span class="fa fa-calendar"></span>
+                            </button>
+                        </div>
+                        <div class="form-actions align-right">
+                            <button id="propose-vocation-button" class="button primary">Propose
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <button id="open-propose-vocation-dialog-button"
+                    class="button primary"
+                    style="width:100%"
+                    onclick="showMetroDialog('#propose-vocation-dialog')">
+                Propose Vocation
+            </button>
+
+            <div id="reserve-out-of-office-dialog" data-role="dialog"
+                 data-close-button="true"
+                 data-overlay="true"
+                 data-overlay-click-close="true"
+                 data-overlay-color="op-darkTeal">
+                <div id="reserve-out-of-office-form"
+                     class="login-form padding20">
+                    <form>
+                        <h4 class="text-light">Reserve Out Of Office</h4>
+                        <hr class="thin">
+                        <br>
+                        <div class="input-control text full-size" data-role="datepicker">
+                            <label class="text-light" for="out-of-office-since">Since:</label>
+                            <input type="text" id="out-of-office-since">
+                            <button class="button">
+                                <span class="fa fa-calendar"></span>
+                            </button>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="input-control text full-size" data-role="datepicker">
+                            <label class="text-light" for="out-of-office-till">Till:</label>
+                            <input type="text" id="out-of-office-till">
+                            <button class="button">
+                                <span class="fa fa-calendar"></span>
+                            </button>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="input-control textarea"
+                             data-role="input"
+                             data-text-auto-resize="true">
+                            <label class="text-light" for="out-of-office-reason">Reason:</label>
+                            <textarea id="out-of-office-reason"></textarea>
+                        </div>
+                        <div class="form-actions align-right">
+                            <button id="reserve-out-of-office-button"
+                                    class="button primary">Reserve
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <button id="open-out-of-office-dialog-button"
+                    class="button primary"
+                    style="width:100%"
+                    onclick="showMetroDialog('#reserve-out-of-office-dialog')">
+                Reserve Out Of Office Days
+            </button>
+
+        </div>
+        <div class="cell colspan4 padding20">
+            <div id="content" class="grid">
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

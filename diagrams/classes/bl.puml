@@ -1,0 +1,55 @@
+@startuml
+left to right direction
+
+class AuthService {
+  - authorizedUsers : Map<String, Tuple2<Integer, Employee>>
+  - authDAO : AuthDAO
+
+  + auth(login : String, password : String) : String
+  + employeeBySession(session : String) : Employee
+  + employeeIdBySession(session : String) : int
+}
+
+class AwardsService {
+  - employeesDAO : EmployeesDAO
+  - awardsDAO : AwardsDAO
+
+  + approvedFor(employeeId : int) : List<Tuple2<Integer, Award>>
+  + pendingInboxFor(employeeId : int) : List<Tuple2<Integer, Award>>
+  + pendingOutboxFor(employeeId : int) : List<Tuple2<Integer, Award>>
+  + get(requester : Employee, awardId : int) : Award
+  + propose(requester : Employee, when : long, duration : long, employeeId : int) : int
+  + approve(requester : Employee, awardId : int) : void
+  + reject(requester : Employee, awardId : int) : void
+  + cancel(requester : Employee, awardId : int) : void
+}
+
+class EmployeesService {
+  - employeesDAO : EmployeesDAO
+  + getAllUnderThePatronageOf(manager : Employee) : List<Tuple2<Integer, ? extends Employee>>
+}
+
+class OutOfOfficesService {
+  - employeesDAO EmployeesDAO
+  - outOfOfficesDAO OutOfOfficesDAO
+
+  + create(requester : Employee, when : long, duration : long, reason : String, employeeId : int)
+   : int
+  + cancel(requester : Employee, outOfOfficeId : int) : void
+  + approvedFor(employeeId : int) : List<Tuple2<Integer, OutOfOffice>>
+}
+
+class VocationsService {
+  - employeesDAO EmployeesDAO;
+  - vocationsDAO VocationsDAO;
+
+  + propose(requester : Employee, when : long, duration : long, employeeId : int) : int
+  + approve(requester : Employee, vocationId : int) : void
+  + reject(requester : Employee, vocationId : int) : void
+  + cancel(requester : Employee, vocationId : int) : void
+  + approvedFor(employeeId : int) : List<Tuple2<Integer, Vocation>>
+  + pendingInboxFor(employeeId : int) : List<Tuple2<Integer, Vocation>>
+  + pendingOutboxFor(employeeId : int) : List<Tuple2<Integer, Vocation>>
+}
+
+@enduml

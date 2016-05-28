@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+
+:Employee: as employee
+:Worker: as worker
+:Manager: as manager
+:Paymaster: as paymaster
+
+worker --|> employee
+manager --|> employee
+paymaster --|> employee
+
+rectangle discussion {
+  (Discussion) as d
+  (Approve) as a
+  (Reject) as c
+
+  a -up-|> d
+  c -up-|> d
+}
+
+rectangle activity {
+  (Propose Award) as pa
+  (Propose Vocation) as pv
+  (Reserve Out-of-Office) as rooo
+
+  pa ..> d
+  rooo ..> d
+  pv ..> d
+}
+
+employee -- rooo
+employee -- pv
+manager -- pa
+
+rectangle view {
+  (View Data) as vd
+
+  (View Working Plan) as vwp
+  (View Awards) as va
+  (View Team) as vt
+
+
+  vwp -up-|> vd
+  va -up-|> vd
+  vt -up-|> vd
+}
+
+employee -- vd
+
+@enduml

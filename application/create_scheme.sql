@@ -1,0 +1,80 @@
+DROP SCHEMA IF EXISTS `test` ;
+CREATE SCHEMA IF NOT EXISTS `test` DEFAULT CHARACTER SET utf8 ;
+USE `test`;
+
+CREATE TABLE `test`.`users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `login` VARCHAR(45) NOT NULL,
+  `password` CHAR(32) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `manager_id` INT NULL,
+  `paymaster_id` INT NULL,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `test`.`users`
+ADD INDEX `fk_manager_id_idx` (`manager_id` ASC),
+ADD INDEX `fk_paymaster_id_idx` (`paymaster_id` ASC);
+ALTER TABLE `test`.`users`
+ADD CONSTRAINT `fk_manager_id`
+  FOREIGN KEY (`manager_id`)
+  REFERENCES `test`.`users` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_paymaster_id`
+  FOREIGN KEY (`paymaster_id`)
+  REFERENCES `test`.`users` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+INSERT INTO users VALUES(null, "dev", MD5("1234"), "developer", null, null);
+INSERT INTO users VALUES(null, "deve", MD5("1234"), "developer", 1, 1);
+
+CREATE TABLE `test`.`awards` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `employee_id` INT NOT NULL,
+  `timestamp` BIGINT(64) NOT NULL,
+  `amount` BIGINT(64) NOT NULL,
+  `approved` TINYINT(1) NOT NULL DEFAULT 0,
+  `rejected` TINYINT(1) NOT NULL DEFAULT 0,
+  `cancelled` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `test`.`awards`
+ADD INDEX `fk_awards_employee_id_idx` (`employee_id` ASC);
+ALTER TABLE `test`.`awards`
+ADD CONSTRAINT `fk_awards_employee_id`
+  FOREIGN KEY (`employee_id`)
+  REFERENCES `test`.`users` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+CREATE TABLE `test`.`out_of_offices` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `employee_id` INT NOT NULL,
+  `timestamp` BIGINT(64) NOT NULL,
+  `duration` BIGINT(64) NOT NULL,
+  `reason` VARCHAR(256) NOT NULL,
+  `cancelled` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_ooo_employee_id_idx` (`employee_id` ASC),
+  CONSTRAINT `fk_ooo_employee_id`
+    FOREIGN KEY (`employee_id`)
+    REFERENCES `test`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `test`.`vocations` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `employee_id` INT NOT NULL,
+  `timestamp` BIGINT(64) NOT NULL,
+  `duration` BIGINT(64) NOT NULL,
+  `approved` TINYINT(1) NOT NULL,
+  `rejected` TINYINT(1) NOT NULL,
+  `cancelled` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_vocations_employee_id_idx` (`employee_id` ASC),
+  CONSTRAINT `fk_vocations_employee_id`
+    FOREIGN KEY (`employee_id`)
+    REFERENCES `test`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

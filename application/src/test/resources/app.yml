@@ -1,0 +1,23 @@
+server:
+  applicationContextPath: /api
+  applicationConnectors:
+    - type: http
+      port: 8080
+    - type: https
+      port: 8443
+      keyStorePath: ./src/test/resources/key.jks
+      keyStorePassword: importkey
+      validateCerts: false
+  adminConnectors:
+    - type: https
+      port: 8444
+      keyStorePath: ./src/test/resources/key.jks
+      keyStorePassword: importkey
+      validateCerts: false
+
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+      logFormat: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

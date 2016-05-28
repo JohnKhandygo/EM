@@ -1,0 +1,47 @@
+@startuml
+actor Paymaster as paymaster
+participant AwardResource as resource
+participant AuthService as auth
+participant AwardsService as awards
+participant "AwardsDAO" as payments
+database DBMS
+
+paymaster -> resource : approve()
+activate resource
+
+''''' auth
+resource -> auth : employeeBySession()
+activate auth
+auth -> resource : Employee
+deactivate auth
+
+resource -> awards : approve()
+activate awards
+
+''''' accept payment
+awards -> payments : get()
+activate payments
+payments -> DBMS : <<query>>
+activate DBMS
+DBMS --> payments : raw response
+deactivate DBMS
+payments --> awards : Award
+deactivate payments
+
+''''' update payment
+ref over awards : Award::approve
+awards -> payments : update()
+activate payments
+payments -> DBMS : <<query>>
+activate DBMS
+DBMS --> payments : raw response
+deactivate DBMS
+payments --> awards : Award
+deactivate payments
+
+awards -->  resource : void
+deactivate awards
+ref over resource : AwardApproved::new
+resource --> paymaster : AwardApproved
+deactivate resource
+@enduml

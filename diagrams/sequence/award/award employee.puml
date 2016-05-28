@@ -1,0 +1,51 @@
+@startuml
+
+actor Manager as manager
+participant AwardResource as resource
+participant AuthService as auth
+participant AwardsService as awards
+participant "EmployeesDAO" as employees
+participant "AwardsDAO" as payments
+database DBMS
+
+manager -> resource : propose()
+activate resource
+
+''''' auth 
+resource -> auth : employeeBySession()
+activate auth
+auth -> resource : Employee
+deactivate auth
+
+resource -> awards : propose()
+activate awards
+
+''''' get awarded employee
+awards -> employees : get()
+activate employees
+employees -> DBMS : <<query>>
+activate DBMS
+DBMS --> employees : raw response
+deactivate DBMS
+employees --> awards : Employee
+deactivate employees
+
+''''' add new payment
+ref over awards : Award::newOne
+awards -> payments : save()
+activate payments
+payments -> DBMS : <<query>>
+activate DBMS
+DBMS --> payments : raw response
+deactivate DBMS
+payments --> awards : int
+deactivate payments
+
+awards -->  resource : int
+deactivate awards
+
+ref over resource : AwardProposed::new
+resource --> manager : AwardProposed
+deactivate resource
+
+@enduml

@@ -1,0 +1,75 @@
+#login-form {
+  width: 25rem;
+  height: 18.75rem;
+  position: fixed;
+  top: 50%;
+  margin-top: -9.375rem;
+  left: 50%;
+  margin-left: -12.5rem;
+  background-color: #ffffff;
+  opacity: 0;
+  -webkit-transform: scale(.8);
+  transform: scale(.8);
+}
+
+div.award-item {
+  background: #ADD8E6
+}
+
+div.out-of-office-item {
+  background: #87CEFA
+}
+
+div.vocation-item {
+  background: #87CEFA
+}
+
+div.manager-item {
+  background: #ADD8E6
+}
+div.paymaster-item {
+  background: #ADD8E6
+}
+div.teammate-item {
+  background: #ADD8E6
+}
+div.patronaged-item {
+  background: #87CEFA
+}
+
+div.award-inbox-item {
+  background: #ADD8E6
+}
+div.award-outbox-item {
+  background: #87CEFA
+}
+div.vocation-inbox-item {
+  background: #ADD8E6
+}
+div.vocation-outbox-item {
+  background: #87CEFA
+}
+
+div.news-item {
+  background: #87CEFA
+}
+
+div.item-info {
+  font-size: 16pt
+}
+
+.item-type {
+  font-size: 10pt;
+  color: gray;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.half-size {
+  width: 50% !important;
+  float: left;
+}
+
+div.award-form {
+  display: none;
+}

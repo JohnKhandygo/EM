@@ -1,0 +1,5 @@
+CREATE USER 'news_provider' IDENTIFIED BY '5678';
+GRANT ALL PRIVILEGES ON news.* TO 'news_provider'@'%' IDENTIFIED BY '5678' REQUIRE SSL;
+GRANT ALL PRIVILEGES ON news.* TO 'news_provider'@'localhost' IDENTIFIED BY '5678' REQUIRE SSL;
+FLUSH PRIVILEGES;
+SET sql_log_bin=0;
