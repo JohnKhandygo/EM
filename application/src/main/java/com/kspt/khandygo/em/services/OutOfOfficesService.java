@@ -31,18 +31,6 @@ public class OutOfOfficesService {
     return outOfOfficesDAO.save(outOfOffice);
   }
 
-  public void update(
-      final Employee requester,
-      final int id,
-      final long when,
-      final long duration,
-      final String reason) {
-    final OutOfOffice outOfOffice = outOfOfficesDAO.get(id);
-    Preconditions.checkState(requester.equals(outOfOffice.employee()));
-    final OutOfOffice model = OutOfOffice.newOne(outOfOffice.employee(), when, duration, reason);
-    outOfOfficesDAO.update(id, model);
-  }
-
   public void cancel(final Employee requester, final int id) {
     final OutOfOffice outOfOffice = outOfOfficesDAO.get(id);
     Preconditions.checkState(requester.equals(outOfOffice.employee()));

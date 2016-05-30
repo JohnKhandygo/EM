@@ -19,7 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -57,20 +56,6 @@ public class OutOfOfficesResource {
     final int employeeId = authService.employeeIdBySession(session);
     final int id = outOfOfficesService.create(requester, when, duration, reason, employeeId);
     return new OutOfOfficeCreated(id);
-  }
-
-  @Path("/{out_of_office_id}/update")
-  @POST
-  @ApiOperation(value = "update out of office.")
-  public OutOfOfficeUpdated cancel(
-      final @HeaderParam("session_id") String session,
-      final @PathParam("out_of_office_id") int outOfOfficeId,
-      final @QueryParam("when") long when,
-      final @QueryParam("duration") long duration,
-      final @QueryParam("reason") String reason) {
-    final Employee requester = authService.employeeBySession(session);
-    outOfOfficesService.update(requester, outOfOfficeId, when, duration, reason);
-    return new OutOfOfficeUpdated();
   }
 
   @Path("/{out_of_office_id}/cancel")

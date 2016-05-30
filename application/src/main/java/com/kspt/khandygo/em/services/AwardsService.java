@@ -43,11 +43,11 @@ public class AwardsService {
         .collect(toList());
   }
 
-  public Award get(final Employee requester, final int awardId) {
+  /*public Award get(final Employee requester, final int awardId) {
     final Award award = awardsDAO.get(awardId);
     Preconditions.checkState(requester.equals(award.employee()));
     return award;
-  }
+  }*/
 
   public int propose(
       final Employee requester,
