@@ -1,18 +1,21 @@
 package com.kspt.khandygo.em.dao;
 
+import com.avaje.ebean.EbeanServer;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Verify;
 import com.kspt.khandygo.em.core.Vocation;
 import com.kspt.khandygo.em.utils.Tuple2;
-import com.kspt.khandygo.persistence.Gateway;
 import static java.util.stream.Collectors.toList;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -20,36 +23,47 @@ import java.util.List;
 @Singleton
 public class VocationsDAO {
 
-  private final Gateway gateway;
+  private final EbeanServer ebean;
 
-  public int save(final Vocation vocation) {
+  public int save(final @NonNull Vocation vocation) {
     final VocationEntity vocationEntity = VocationEntity.newOne(vocation);
-    return gateway.save(vocationEntity).id;
+    Verify.verify(vocationEntity.id == null, "Cannot save entity with non null id.");
+    ebean.save(vocationEntity);
+    Verify.verifyNotNull(vocationEntity.id, "Id must be non null after save.");
+    return vocationEntity.id;
   }
 
+  @NonNull
   public Vocation get(final int id) {
-    return gateway.find(VocationEntity.class).where().eq("id", id).unique().toVocation();
+    final VocationEntity found = ebean.find(VocationEntity.class).where().eq("id", id).findUnique();
+    Verify.verifyNotNull(found, "Cannot find vocation entity for id %s.", id);
+    return found.toVocation();
   }
 
-  public Vocation update(final int id, final Vocation model) {
+  @NonNull
+  public Vocation update(final int id, final @NonNull Vocation model) {
     final VocationEntity vocationEntity = VocationEntity.existedOne(id, model);
-    return gateway.update(vocationEntity).toVocation();
+    Verify.verifyNotNull(vocationEntity.id, "Cannot update entity with null id.");
+    ebean.update(vocationEntity);
+    return vocationEntity.toVocation();
   }
 
+  @NonNull
   public List<Tuple2<Integer, Vocation>> approvedFor(final int employeeId) {
-    final List<VocationEntity> vocationEntities = gateway.find(VocationEntity.class)
+    final List<VocationEntity> vocationEntities = ebean.find(VocationEntity.class)
         .where()
         .eq("employee_id", employeeId)
         .and()
         .eq("approved", 1)
-        .list();
+        .findList();
     return vocationEntities.stream()
-        .map(entity -> new Tuple2<>(entity.id, entity.toVocation()))
+        .map(entity -> Tuple2.of(entity.id, entity.toVocation()))
         .collect(toList());
   }
 
-  public List<Tuple2<Integer, Vocation>> pendingFor(final Integer employeeId) {
-    final List<VocationEntity> awardEntities = gateway.find(VocationEntity.class).where()
+  @NonNull
+  public List<Tuple2<Integer, Vocation>> pendingFor(final int employeeId) {
+    final List<VocationEntity> awardEntities = ebean.find(VocationEntity.class).where()
         .eq("employee_id", employeeId)
         .and()
         .eq("approved", 0)
@@ -57,9 +71,9 @@ public class VocationsDAO {
         .eq("rejected", 0)
         .and()
         .eq("cancelled", 0)
-        .list();
+        .findList();
     return awardEntities.stream()
-        .map(entity -> new Tuple2<>(entity.id, entity.toVocation()))
+        .map(entity -> Tuple2.of(entity.id, entity.toVocation()))
         .collect(toList());
   }
 
@@ -68,23 +82,26 @@ public class VocationsDAO {
   @AllArgsConstructor(access = AccessLevel.PRIVATE)
   @EqualsAndHashCode
   @ToString
-  private static class VocationEntity {
+  @SuppressWarnings("WeakerAccess")
+  public static class VocationEntity {
     @Id
-    private final Integer id;
+    private Integer id;
 
-    private final UserEntity employee;
+    @ManyToOne
+    private UserEntity employee;
 
-    private final Long timestamp;
+    private Long timestamp;
 
-    private final Long duration;
+    private Long duration;
 
-    private final Boolean approved;
+    private Boolean approved;
 
-    private final Boolean rejected;
+    private Boolean rejected;
 
-    private final Boolean cancelled;
+    private Boolean cancelled;
 
-    static VocationEntity newOne(final Vocation vocation) {
+    @NonNull
+    static VocationEntity newOne(final @NonNull Vocation vocation) {
       Preconditions.checkState(vocation.employee() instanceof UserEntity,
           "There is no sufficient type information to save %s.", vocation);
       return new VocationEntity(
@@ -97,7 +114,8 @@ public class VocationsDAO {
           vocation.cancelled());
     }
 
-    static VocationEntity existedOne(final int id, final Vocation vocation) {
+    @NonNull
+    static VocationEntity existedOne(final int id, final @NonNull Vocation vocation) {
       Preconditions.checkState(vocation.employee() instanceof UserEntity,
           "There is no sufficient type information to save %s.", vocation);
       return new VocationEntity(
@@ -110,6 +128,7 @@ public class VocationsDAO {
           vocation.cancelled());
     }
 
+    @NonNull
     Vocation toVocation() {
       return new Vocation(employee, timestamp, duration, approved, rejected, cancelled);
     }

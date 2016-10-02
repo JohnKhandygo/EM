@@ -1,3 +1,4 @@
+/*
 package com.kspt.khandygo.em.web.resources;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -55,3 +56,4 @@ public class NewsResource {
     private final String text;
   }
 }
+*/

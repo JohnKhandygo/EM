@@ -1,3 +1,4 @@
+/*
 package com.kspt.khandygo.em.services;
 
 import com.kspt.khandygo.news.web.api.NewsApi;
@@ -32,3 +33,4 @@ public class NewsService {
     private final String text;
   }
 }
+*/

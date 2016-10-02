@@ -37,8 +37,8 @@ public class AwardsServiceTest {
   public void whenAccessPendingInbox_pendingForIsAccessed() {
     doReturn(
         newArrayList(
-            new Tuple2<>(0, mock(Employee.class)),
-            new Tuple2<>(1, mock(Employee.class))))
+            Tuple2.of(0, mock(Employee.class)),
+            Tuple2.of(1, mock(Employee.class))))
         .when(employeesDAO).getAllMasteredBy(anyInt());
     awardsService.pendingInboxFor(0);
     verify(employeesDAO, times(1)).getAllMasteredBy(0);
@@ -51,8 +51,8 @@ public class AwardsServiceTest {
   public void whenAccessPendingOutbox_pendingForIsAccessed() {
     doReturn(
         newArrayList(
-            new Tuple2<>(0, mock(Employee.class)),
-            new Tuple2<>(1, mock(Employee.class))))
+            Tuple2.of(0, mock(Employee.class)),
+            Tuple2.of(1, mock(Employee.class))))
         .when(employeesDAO).getAllUnderThePatronageOf(anyInt());
     awardsService.pendingOutboxFor(0);
     verify(employeesDAO, times(1)).getAllUnderThePatronageOf(0);

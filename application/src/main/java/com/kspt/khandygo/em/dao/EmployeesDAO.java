@@ -1,11 +1,12 @@
 package com.kspt.khandygo.em.dao;
 
+import com.avaje.ebean.EbeanServer;
 import com.google.common.base.Preconditions;
 import com.kspt.khandygo.em.core.Employee;
 import com.kspt.khandygo.em.utils.Tuple2;
-import com.kspt.khandygo.persistence.Gateway;
 import static java.util.stream.Collectors.toList;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -14,43 +15,47 @@ import java.util.List;
 @Singleton
 public class EmployeesDAO {
 
-  private final Gateway gateway;
+  private final EbeanServer ebean;
 
+  @NonNull
   public Employee get(final int id) {
-    return gateway.find(UserEntity.class).where().eq("id", id).unique();
+    return ebean.find(UserEntity.class).where().eq("id", id).findUnique();
   }
 
+  @NonNull
   public List<Tuple2<Integer, ? extends Employee>> getAllUnderThePatronageOf(
-      final Employee manager) {
+      final @NonNull Employee manager) {
     Preconditions.checkState(manager instanceof UserEntity);
     final Integer managerId = ((UserEntity) manager).id();
-    return gateway.find(UserEntity.class)
+    return ebean.find(UserEntity.class)
         .where()
         .eq("manager_id", managerId)
-        .list()
+        .findList()
         .stream()
-        .map(entity -> new Tuple2<>(entity.id(), entity))
+        .map(entity -> Tuple2.of(entity.id(), entity))
         .collect(toList());
   }
 
+  @NonNull
   public List<Tuple2<Integer, ? extends Employee>> getAllUnderThePatronageOf(
       final int managerId) {
-    return gateway.find(UserEntity.class)
+    return ebean.find(UserEntity.class)
         .where()
         .eq("manager_id", managerId)
-        .list()
+        .findList()
         .stream()
-        .map(entity -> new Tuple2<>(entity.id(), entity))
+        .map(entity -> Tuple2.of(entity.id(), entity))
         .collect(toList());
   }
 
+  @NonNull
   public List<Tuple2<Integer, ? extends Employee>> getAllMasteredBy(final int paymasterId) {
-    return gateway.find(UserEntity.class)
+    return ebean.find(UserEntity.class)
         .where()
         .eq("paymaster_id", paymasterId)
-        .list()
+        .findList()
         .stream()
-        .map(entity -> new Tuple2<>(entity.id(), entity))
+        .map(entity -> Tuple2.of(entity.id(), entity))
         .collect(toList());
   }
 }

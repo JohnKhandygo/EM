@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>application</artifactId>
+    <version>2.1</version>
 
     <properties>
         <!--build-->
@@ -30,6 +31,8 @@
         <assertj-core.version>3.3.0</assertj-core.version>
         <mockito-all.version>2.0.2-beta</mockito-all.version>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
+        <avaje-ebeanorm.version>6.1.1</avaje-ebeanorm.version>
+
     </properties>
 
     <dependencyManagement>
@@ -46,11 +49,11 @@
 
     <dependencies>
         <!-- internal -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.kspt.khandygo</groupId>
             <artifactId>orm</artifactId>
             <version>2.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.kspt.khandygo</groupId>
             <artifactId>news-provider</artifactId>
@@ -93,6 +96,13 @@
             <groupId>com.netflix.feign</groupId>
             <artifactId>feign-jaxrs</artifactId>
             <version>${feign.version}</version>
+        </dependency>
+
+        <!-- orm -->
+        <dependency>
+            <groupId>org.avaje.ebeanorm</groupId>
+            <artifactId>avaje-ebeanorm</artifactId>
+            <version>${avaje-ebeanorm.version}</version>
         </dependency>
 
         <!-- json -->

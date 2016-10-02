@@ -51,7 +51,7 @@ public class AuthServiceTest {
   @Test
   public void whenAuthCredentialsRight_AuthorizedUsersContainsCorrespondingEntry() {
     //GIVEN
-    final Tuple2<Integer, Employee> fake = new Tuple2<>(0, mock(Employee.class));
+    final Tuple2<Integer, Employee> fake = Tuple2.of(0, mock(Employee.class));
     doReturn(fake).when(authDAO).get(anyString(), anyString());
 
     //WHEN
@@ -65,7 +65,7 @@ public class AuthServiceTest {
   @Test
   public void whenUserAuthenticated_employeeReturn() {
     //GIVEN
-    final Tuple2<Integer, Employee> fake = new Tuple2<>(0, mock(Employee.class));
+    final Tuple2<Integer, Employee> fake = Tuple2.of(0, mock(Employee.class));
     authorizedUsers.put("", fake);
 
     //WHEN
@@ -78,7 +78,7 @@ public class AuthServiceTest {
   @Test
   public void whenUserAuthenticated_idReturn() {
     //GIVEN
-    final Tuple2<Integer, Employee> fake = new Tuple2<>(0, mock(Employee.class));
+    final Tuple2<Integer, Employee> fake = Tuple2.of(0, mock(Employee.class));
     authorizedUsers.put("", fake);
 
     //WHEN

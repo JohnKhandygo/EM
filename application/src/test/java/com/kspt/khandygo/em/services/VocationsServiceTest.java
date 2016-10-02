@@ -150,8 +150,8 @@ public class VocationsServiceTest {
   public void whenAccessPendingInbox_pendingForIsAccessed() {
     doReturn(
         newArrayList(
-            new Tuple2<>(0, mock(Employee.class)),
-            new Tuple2<>(1, mock(Employee.class))))
+            Tuple2.of(0, mock(Employee.class)),
+            Tuple2.of(1, mock(Employee.class))))
         .when(employeesDAO).getAllMasteredBy(0);
     service.pendingInboxFor(0);
     verify(employeesDAO, times(1)).getAllMasteredBy(0);
@@ -164,8 +164,8 @@ public class VocationsServiceTest {
   public void whenAccessPendingOutbox_delegateToDAO() {
     doReturn(
         newArrayList(
-            new Tuple2<>(0, mock(Employee.class)),
-            new Tuple2<>(1, mock(Employee.class))))
+            Tuple2.of(0, mock(Employee.class)),
+            Tuple2.of(1, mock(Employee.class))))
         .when(employeesDAO).getAllUnderThePatronageOf(0);
     service.pendingOutboxFor(0);
     verify(vocationsDAO, times(1)).pendingFor(0);

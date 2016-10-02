@@ -1,3 +1,4 @@
+/*
 package com.kspt.khandygo.em.services;
 
 import com.kspt.khandygo.news.web.api.NewsApi;
@@ -29,4 +30,4 @@ public class NewsServiceTest {
     //THEN
     verify(externalApi, times(1)).getNewsForLastDay();
   }
-}
+}*/

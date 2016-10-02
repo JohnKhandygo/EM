@@ -1,42 +1,36 @@
 package com.kspt.khandygo.em;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import com.kspt.khandygo.em.dao.AuthDAO;
 import com.kspt.khandygo.em.services.AuthService;
-import com.kspt.khandygo.news.web.api.NewsApi;
-import com.kspt.khandygo.persistence.SQLServer;
 import com.typesafe.config.Config;
 import static com.typesafe.config.ConfigFactory.parseResources;
 import com.typesafe.config.ConfigParseOptions;
-import feign.Client.Default;
-import feign.Feign;
-import feign.jackson.JacksonDecoder;
-import feign.jaxrs.JAXRSContract;
-import static java.lang.String.format;
 import static java.lang.Thread.currentThread;
+import static java.util.stream.Collectors.joining;
 import lombok.extern.slf4j.Slf4j;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import java.io.File;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Slf4j
 public class GuiceModule extends AbstractModule {
 
   @Override
   protected void configure() {
-
+    bind(EbeanServer.class).toProvider(EbeanProvider.class).in(Singleton.class);
   }
 
   @Provides
@@ -50,7 +44,7 @@ public class GuiceModule extends AbstractModule {
     return c.resolve();
   }
 
-  @Provides
+  /*@Provides
   @Singleton
   private SQLServer provideSQLServer(final Config config) {
     final Config databaseConfig = config.getConfig("database");
@@ -60,7 +54,7 @@ public class GuiceModule extends AbstractModule {
         databaseConfig.getString("scheme"),
         databaseConfig.getString("user"),
         databaseConfig.getString("password"));
-  }
+  }*/
 
   @Provides
   @Singleton
@@ -68,7 +62,7 @@ public class GuiceModule extends AbstractModule {
     return new AuthService(Maps.newConcurrentMap(), authDAO);
   }
 
-  @Provides
+  /*@Provides
   @Singleton
   private NewsApi provideNewsApi(final Config config) {
     final Config newsConfig = config.getConfig("news");
@@ -83,9 +77,9 @@ public class GuiceModule extends AbstractModule {
         .decoder(new JacksonDecoder(dodgyMapper))
         .contract(new JAXRSContract())
         .target(NewsApi.class, apiAddress);
-  }
+  }*/
 
-  private static SSLContext sslContext() {
+  /*private static SSLContext sslContext() {
     TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
       public void checkClientTrusted(X509Certificate[] certs, String authType) {
       }
@@ -111,5 +105,35 @@ public class GuiceModule extends AbstractModule {
 
   private static HostnameVerifier allowAllHostnameVerifier() {
     return (s, sslSession) -> true;
+  }*/
+
+  private static class EbeanProvider implements Provider<EbeanServer> {
+
+    private static final String EBEAN_PROPERTIES = "ebean.properties";
+
+    @Override
+    public EbeanServer get() {
+      final Stopwatch started = Stopwatch.createStarted();
+      final EbeanServer server = Ebean.getServer(null);
+      checkNotNull(server, "Cannot create ebean server: no '%s' resource file", EBEAN_PROPERTIES);
+      try {
+        logEbeanProperties();
+      } catch (Exception e) {
+        log.error("Unexpected error during ebean configuration logging.", e);
+      }
+      log.warn("Elapsed time to create ebean server {}", started);
+      return server;
+    }
+
+    private void logEbeanProperties()
+    throws URISyntaxException, IOException {
+      final URL propertiesUrl = currentThread().getContextClassLoader()
+          .getResource(EBEAN_PROPERTIES);
+      checkNotNull(propertiesUrl, "Cannnot resolve resource name '%s'.", EBEAN_PROPERTIES);
+      final URI propertiesUri = propertiesUrl.toURI();
+      final String properties = Files.lines(Paths.get(propertiesUri)).collect(joining("\n"));
+      log.warn("Loading '{}' from {}:\n{}", EBEAN_PROPERTIES, propertiesUri.getPath(), properties);
+      log.warn("End of '{}'.", EBEAN_PROPERTIES);
+    }
   }
 }

@@ -1,18 +1,21 @@
 package com.kspt.khandygo.em.dao;
 
+import com.avaje.ebean.EbeanServer;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Verify;
 import com.kspt.khandygo.em.core.OutOfOffice;
 import com.kspt.khandygo.em.utils.Tuple2;
-import com.kspt.khandygo.persistence.Gateway;
 import static java.util.stream.Collectors.toList;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -20,31 +23,44 @@ import java.util.List;
 @Singleton
 public class OutOfOfficesDAO {
 
-  private final Gateway gateway;
+  private final EbeanServer ebean;
 
-  public int save(final OutOfOffice outOfOffice) {
+  public int save(final @NonNull OutOfOffice outOfOffice) {
     final OutOfOfficeEntity outOfOfficeEntity = OutOfOfficeEntity.newOne(outOfOffice);
-    return gateway.save(outOfOfficeEntity).id;
+    Verify.verify(outOfOfficeEntity.id == null, "Cannot save entity with non null id.");
+    ebean.save(outOfOfficeEntity);
+    Verify.verifyNotNull(outOfOfficeEntity.id, "Id must be non null after save.");
+    return outOfOfficeEntity.id;
   }
 
+  @NonNull
   public OutOfOffice get(final int id) {
-    return gateway.find(OutOfOfficeEntity.class).where().eq("id", id).unique().toOuOfOffice();
+    final OutOfOfficeEntity found = ebean.find(OutOfOfficeEntity.class)
+        .where()
+        .eq("id", id)
+        .findUnique();
+    Verify.verifyNotNull(found, "Cannot find out of office entity for id %s.", id);
+    return found.toOuOfOffice();
   }
 
-  public OutOfOffice update(final int id, final OutOfOffice model) {
+  @NonNull
+  public OutOfOffice update(final int id, final @NonNull OutOfOffice model) {
     final OutOfOfficeEntity outOfOfficeEntity = OutOfOfficeEntity.existedOne(id, model);
-    return gateway.update(outOfOfficeEntity).toOuOfOffice();
+    Verify.verifyNotNull(outOfOfficeEntity.id, "Cannot update entity with null id.");
+    ebean.update(outOfOfficeEntity);
+    return outOfOfficeEntity.toOuOfOffice();
   }
 
+  @NonNull
   public List<Tuple2<Integer, OutOfOffice>> approvedFor(final int employeeId) {
-    final List<OutOfOfficeEntity> outOfOfficeEntities = gateway.find(OutOfOfficeEntity.class)
+    final List<OutOfOfficeEntity> outOfOfficeEntities = ebean.find(OutOfOfficeEntity.class)
         .where()
         .eq("employee_id", employeeId)
         .and()
         .eq("cancelled", 0)
-        .list();
+        .findList();
     return outOfOfficeEntities.stream()
-        .map(entity -> new Tuple2<>(entity.id, entity.toOuOfOffice()))
+        .map(entity -> Tuple2.of(entity.id, entity.toOuOfOffice()))
         .collect(toList());
   }
 
@@ -53,25 +69,29 @@ public class OutOfOfficesDAO {
   @AllArgsConstructor(access = AccessLevel.PRIVATE)
   @EqualsAndHashCode
   @ToString
-  private static class OutOfOfficeEntity {
+  @SuppressWarnings("WeakerAccess")
+  public static class OutOfOfficeEntity {
     @Id
-    private final Integer id;
+    private Integer id;
 
-    private final UserEntity employee;
+    @ManyToOne
+    private UserEntity employee;
 
-    private final Long timestamp;
+    private Long timestamp;
 
-    private final Long duration;
+    private Long duration;
 
-    private final String reason;
+    private String reason;
 
-    private final Boolean cancelled;
+    private Boolean cancelled;
 
+    @NonNull
     OutOfOffice toOuOfOffice() {
       return new OutOfOffice(employee, timestamp, duration, reason, cancelled);
     }
 
-    static OutOfOfficeEntity newOne(final OutOfOffice outOfOffice) {
+    @NonNull
+    static OutOfOfficeEntity newOne(final @NonNull OutOfOffice outOfOffice) {
       Preconditions.checkState(outOfOffice.employee() instanceof UserEntity,
           "There is no sufficient type information to save %s.", outOfOffice);
       return new OutOfOfficeEntity(
@@ -83,7 +103,8 @@ public class OutOfOfficesDAO {
           outOfOffice.cancelled());
     }
 
-    static OutOfOfficeEntity existedOne(final int id, final OutOfOffice outOfOffice) {
+    @NonNull
+    static OutOfOfficeEntity existedOne(final int id, final @NonNull OutOfOffice outOfOffice) {
       Preconditions.checkState(outOfOffice.employee() instanceof UserEntity,
           "There is no sufficient type information to save %s.", outOfOffice);
       return new OutOfOfficeEntity(

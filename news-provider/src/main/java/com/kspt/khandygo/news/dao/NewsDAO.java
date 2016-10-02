@@ -37,7 +37,8 @@ public class NewsDAO {
   @AllArgsConstructor
   @Accessors(fluent = true)
   @Getter
-  private static class NewsItemEntry {
+  @SuppressWarnings("WeakerAccess")
+  public static class NewsItemEntry {
     @Id
     private final Integer id;
 
