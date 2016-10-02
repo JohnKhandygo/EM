@@ -83,20 +83,20 @@ public class AwardsDAO {
   @SuppressWarnings("WeakerAccess")
   public static class AwardEntity {
     @Id
-    private Integer id;
+    private final Integer id;
 
     @ManyToOne
-    private UserEntity employee;
+    private final UserEntity employee;
 
-    private Long timestamp;
+    private final Long timestamp;
 
-    private Long amount;
+    private final Long amount;
 
-    private Boolean approved;
+    private final Boolean approved;
 
-    private Boolean rejected;
+    private final Boolean rejected;
 
-    private Boolean cancelled;
+    private final Boolean cancelled;
 
     Award toAward() {
       return new Award(employee, timestamp, amount, approved, rejected, cancelled);

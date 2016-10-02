@@ -5,12 +5,12 @@
     <parent>
         <artifactId>employee-management-parent</artifactId>
         <groupId>com.kspt.khandygo</groupId>
-        <version>2.0</version>
+        <version>3.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>application</artifactId>
-    <version>2.1</version>
+    <version>3.0</version>
 
     <properties>
         <!--build-->
@@ -31,7 +31,7 @@
         <assertj-core.version>3.3.0</assertj-core.version>
         <mockito-all.version>2.0.2-beta</mockito-all.version>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
-        <avaje-ebeanorm.version>6.1.1</avaje-ebeanorm.version>
+        <avaje-ebeanorm.version>8.1.1</avaje-ebeanorm.version>
 
     </properties>
 

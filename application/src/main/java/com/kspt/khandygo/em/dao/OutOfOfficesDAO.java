@@ -72,18 +72,18 @@ public class OutOfOfficesDAO {
   @SuppressWarnings("WeakerAccess")
   public static class OutOfOfficeEntity {
     @Id
-    private Integer id;
+    private final Integer id;
 
     @ManyToOne
-    private UserEntity employee;
+    private final UserEntity employee;
 
-    private Long timestamp;
+    private final Long timestamp;
 
-    private Long duration;
+    private final Long duration;
 
-    private String reason;
+    private final String reason;
 
-    private Boolean cancelled;
+    private final Boolean cancelled;
 
     @NonNull
     OutOfOffice toOuOfOffice() {

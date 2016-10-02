@@ -85,20 +85,20 @@ public class VocationsDAO {
   @SuppressWarnings("WeakerAccess")
   public static class VocationEntity {
     @Id
-    private Integer id;
+    private final Integer id;
 
     @ManyToOne
-    private UserEntity employee;
+    private final UserEntity employee;
 
-    private Long timestamp;
+    private final Long timestamp;
 
-    private Long duration;
+    private final Long duration;
 
-    private Boolean approved;
+    private final Boolean approved;
 
-    private Boolean rejected;
+    private final Boolean rejected;
 
-    private Boolean cancelled;
+    private final Boolean cancelled;
 
     @NonNull
     static VocationEntity newOne(final @NonNull Vocation vocation) {
