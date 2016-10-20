@@ -1,6 +1,7 @@
 package com.kspt.khandygo.em.dao;
 
 import com.avaje.ebean.EbeanServer;
+import static com.avaje.ebean.Expr.*;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Verify;
 import com.kspt.khandygo.em.core.Vocation;
@@ -52,9 +53,7 @@ public class VocationsDAO {
   public List<Tuple2<Integer, Vocation>> approvedFor(final int employeeId) {
     final List<VocationEntity> vocationEntities = ebean.find(VocationEntity.class)
         .where()
-        .eq("employee_id", employeeId)
-        .and()
-        .eq("approved", 1)
+        .and(eq("employee_id", employeeId), eq("approved", 1))
         .findList();
     return vocationEntities.stream()
         .map(entity -> Tuple2.of(entity.id, entity.toVocation()))
@@ -64,13 +63,13 @@ public class VocationsDAO {
   @NonNull
   public List<Tuple2<Integer, Vocation>> pendingFor(final int employeeId) {
     final List<VocationEntity> awardEntities = ebean.find(VocationEntity.class).where()
-        .eq("employee_id", employeeId)
-        .and()
-        .eq("approved", 0)
-        .and()
-        .eq("rejected", 0)
-        .and()
-        .eq("cancelled", 0)
+        .and(
+            eq("employee_id", employeeId),
+            and(
+                eq("approved", 0),
+                and(
+                    eq("rejected", 0),
+                    eq("cancelled", 0))))
         .findList();
     return awardEntities.stream()
         .map(entity -> Tuple2.of(entity.id, entity.toVocation()))

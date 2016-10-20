@@ -1,6 +1,8 @@
 package com.kspt.khandygo.em.dao;
 
 import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.Expr;
+import static com.avaje.ebean.Expr.eq;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Verify;
 import com.kspt.khandygo.em.core.Award;
@@ -27,9 +29,7 @@ public class AwardsDAO {
 
   public List<Tuple2<Integer, Award>> approvedFor(final int employeeId) {
     final List<AwardEntity> awardEntities = ebean.find(AwardEntity.class).where()
-        .eq("employee_id", employeeId)
-        .and()
-        .eq("approved", 1)
+        .and(eq("employee_id", employeeId), eq("approved", 1))
         .findList();
     return awardEntities.stream()
         .map(awardEntity -> Tuple2.of(awardEntity.id, awardEntity.toAward()))
@@ -39,13 +39,13 @@ public class AwardsDAO {
   @NonNull
   public List<Tuple2<Integer, Award>> pendingFor(final int employeeId) {
     final List<AwardEntity> awardEntities = ebean.find(AwardEntity.class).where()
-        .eq("employee_id", employeeId)
-        .and()
-        .eq("approved", 0)
-        .and()
-        .eq("rejected", 0)
-        .and()
-        .eq("cancelled", 0)
+        .and(
+            eq("employee_id", employeeId),
+            Expr.and(
+                eq("approved", 0),
+                Expr.and(
+                    eq("rejected", 0),
+                    eq("cancelled", 0))))
         .findList();
     return awardEntities.stream()
         .map(awardEntity -> Tuple2.of(awardEntity.id, awardEntity.toAward()))

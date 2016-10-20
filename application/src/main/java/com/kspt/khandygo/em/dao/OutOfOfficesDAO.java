@@ -1,6 +1,7 @@
 package com.kspt.khandygo.em.dao;
 
 import com.avaje.ebean.EbeanServer;
+import static com.avaje.ebean.Expr.eq;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Verify;
 import com.kspt.khandygo.em.core.OutOfOffice;
@@ -55,9 +56,7 @@ public class OutOfOfficesDAO {
   public List<Tuple2<Integer, OutOfOffice>> approvedFor(final int employeeId) {
     final List<OutOfOfficeEntity> outOfOfficeEntities = ebean.find(OutOfOfficeEntity.class)
         .where()
-        .eq("employee_id", employeeId)
-        .and()
-        .eq("cancelled", 0)
+        .and(eq("employee_id", employeeId), eq("cancelled", 0))
         .findList();
     return outOfOfficeEntities.stream()
         .map(entity -> Tuple2.of(entity.id, entity.toOuOfOffice()))

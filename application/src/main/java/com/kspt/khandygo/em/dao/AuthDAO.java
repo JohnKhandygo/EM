@@ -1,11 +1,11 @@
 package com.kspt.khandygo.em.dao;
 
 import com.avaje.ebean.EbeanServer;
+import static com.avaje.ebean.Expr.eq;
 import com.kspt.khandygo.em.core.Employee;
 import com.kspt.khandygo.em.utils.Tuple2;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.security.MessageDigest;
@@ -19,11 +19,9 @@ public class AuthDAO {
 
   public Tuple2<Integer, Employee> get(
       final @NonNull String login,
-      final @NotNull String password) {
+      final @NonNull String password) {
     final UserEntity userEntity = ebean.find(UserEntity.class).where()
-        .eq("login", login)
-        .and()
-        .eq("password", hash(password))
+        .and(eq("login", login), eq("password", hash(password)))
         .findUnique();
     return Tuple2.of(userEntity.id(), userEntity);
   }

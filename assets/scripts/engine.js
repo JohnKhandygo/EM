@@ -1,4 +1,4 @@
-var address = "http://localhost:8080";
+var address = "http://localhost:8080/application";
 
 var session
 
