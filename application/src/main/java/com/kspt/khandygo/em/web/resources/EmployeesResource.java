@@ -1,9 +1,11 @@
 package com.kspt.khandygo.em.web.resources;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.common.collect.Lists;
 import com.kspt.khandygo.em.core.Employee;
 import com.kspt.khandygo.em.services.AuthService;
 import com.kspt.khandygo.em.services.EmployeesService;
+import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 import lombok.AllArgsConstructor;
 import javax.inject.Inject;
@@ -52,13 +54,15 @@ public class EmployeesResource {
       final @HeaderParam("session_id") String session) {
     final Employee employee = authService.employeeBySession(session);
     final Employee manager = employee.manager();
-    return employeesService.getAllUnderThePatronageOf(manager)
-        .stream()
-        .<Employee>map(t2 -> t2._2)
-        .filter(e -> !e.equals(employee))
-        .map(Employee::name)
-        .map(EmployeeRepresentation::forName)
-        .collect(toList());
+    if (nonNull(manager))
+      return employeesService.getAllUnderThePatronageOf(manager)
+          .stream()
+          .<Employee>map(t2 -> t2._2)
+          .filter(e -> !e.equals(employee))
+          .map(Employee::name)
+          .map(EmployeeRepresentation::forName)
+          .collect(toList());
+    return Lists.newArrayList();
   }
 
   @Path("/patronaged")
