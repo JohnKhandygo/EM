@@ -164,7 +164,7 @@ $(document).ready(function() {
     })
 
     $.ajax({
-      url: address + "/api/employees/temmates",
+      url: address + "/api/employees/teammates",
       method: "GET",
       contentType: "application/json",
       headers: {
