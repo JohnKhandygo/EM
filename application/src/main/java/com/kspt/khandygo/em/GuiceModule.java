@@ -13,7 +13,7 @@ import com.kspt.khandygo.em.dao.AuthDAO;
 import com.kspt.khandygo.em.dao.AwardsDAO.AwardEntity;
 import com.kspt.khandygo.em.dao.OutOfOfficesDAO.OutOfOfficeEntity;
 import com.kspt.khandygo.em.dao.UserEntity;
-import com.kspt.khandygo.em.dao.VocationsDAO;
+import com.kspt.khandygo.em.dao.VocationsDAO.VocationEntity;
 import com.kspt.khandygo.em.services.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -36,19 +36,11 @@ public class GuiceModule extends AbstractModule {
 
   private static class EbeanProvider implements Provider<EbeanServer> {
 
-    private static final String EBEAN_PROPERTIES = "ebean.properties";
-
     @Override
     public EbeanServer get() {
       final Stopwatch started = Stopwatch.createStarted();
-      /*try {
-        logEbeanProperties();
-      } catch (Exception e) {
-        log.error("Unexpected error during ebean configuration logging.", e);
-      }*/
-      //final EbeanServer server = Ebean.getServer(null);
       final EbeanServer server = EbeanServerFactory.create(getServerConfig());
-      checkNotNull(server, "Cannot create ebean server: no '%s' resource file", EBEAN_PROPERTIES);
+      checkNotNull(server, "Cannot create ebean server.");
       log.warn("Elapsed time to create ebean server {}", started);
       return server;
     }
@@ -62,7 +54,7 @@ public class GuiceModule extends AbstractModule {
       c.addClass(AwardEntity.class);
       c.addClass(OutOfOfficeEntity.class);
       c.addClass(OutOfOfficeEntity.class);
-      c.addClass(VocationsDAO.class);
+      c.addClass(VocationEntity.class);
       return c;
     }
 
@@ -75,16 +67,5 @@ public class GuiceModule extends AbstractModule {
       dsc.setPassword("1234");
       return dsc;
     }
-
-    /*private void logEbeanProperties()
-    throws URISyntaxException, IOException {
-      final URL propertiesUrl = currentThread().getContextClassLoader()
-          .getResource(EBEAN_PROPERTIES);
-      checkNotNull(propertiesUrl, "Cannnot resolve resource name '%s'.", EBEAN_PROPERTIES);
-      final URI propertiesUri = propertiesUrl.toURI();
-      final String properties = Files.lines(Paths.get(propertiesUri)).collect(joining("\n"));
-      log.warn("Loading '{}' from {}:\n{}", EBEAN_PROPERTIES, propertiesUri.getPath(), properties);
-      log.warn("End of '{}'.", EBEAN_PROPERTIES);
-    }*/
   }
 }
