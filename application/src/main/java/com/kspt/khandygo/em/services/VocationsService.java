@@ -9,6 +9,7 @@ import com.kspt.khandygo.em.utils.Tuple2;
 import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -22,7 +23,7 @@ public class VocationsService {
   private final VocationsDAO vocationsDAO;
 
   public int propose(
-      final Employee requester,
+      final @NonNull Employee requester,
       final long when,
       final long duration,
       final int employeeId) {
@@ -32,31 +33,33 @@ public class VocationsService {
     return vocationsDAO.save(vocation);
   }
 
-  public void approve(final Employee requester, final int id) {
+  public void approve(final @NonNull Employee requester, final int id) {
     final Vocation vocation = vocationsDAO.get(id);
     Preconditions.checkState(requester.equals(vocation.employee().manager()));
     final Vocation approvedVocation = vocation.approve();
     vocationsDAO.update(id, approvedVocation);
   }
 
-  public void reject(final Employee requester, final int id) {
+  public void reject(final @NonNull Employee requester, final int id) {
     final Vocation vocation = vocationsDAO.get(id);
     Preconditions.checkState(requester.equals(vocation.employee().manager()));
     final Vocation rejectedVocation = vocation.reject();
     vocationsDAO.update(id, rejectedVocation);
   }
 
-  public void cancel(final Employee requester, final int id) {
+  public void cancel(final @NonNull Employee requester, final int id) {
     final Vocation vocation = vocationsDAO.get(id);
     Preconditions.checkState(requester.equals(vocation.employee()));
     final Vocation cancelledVocation = vocation.cancel();
     vocationsDAO.update(id, cancelledVocation);
   }
 
+  @NonNull
   public List<Tuple2<Integer, Vocation>> approvedFor(final int employeeId) {
     return vocationsDAO.approvedFor(employeeId);
   }
 
+  @NonNull
   public List<Tuple2<Integer, Vocation>> pendingInboxFor(final int employeeId) {
     return employeesDAO.getAllMasteredBy(employeeId).stream()
         .map(t2 -> t2._1)
@@ -66,6 +69,7 @@ public class VocationsService {
         .collect(toList());
   }
 
+  @NonNull
   public List<Tuple2<Integer, Vocation>> pendingOutboxFor(final int employeeId) {
     return vocationsDAO.pendingFor(employeeId);
   }

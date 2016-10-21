@@ -17,6 +17,7 @@ public class AuthDAO {
 
   private final EbeanServer ebean;
 
+  @NonNull
   public Tuple2<Integer, Employee> get(
       final @NonNull String login,
       final @NonNull String password) {
@@ -26,6 +27,7 @@ public class AuthDAO {
     return Tuple2.of(userEntity.id(), userEntity);
   }
 
+  @NonNull
   private String hash(final @NonNull String string) {
     final MessageDigest md;
     try {

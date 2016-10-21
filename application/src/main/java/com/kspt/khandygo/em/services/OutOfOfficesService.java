@@ -7,6 +7,7 @@ import com.kspt.khandygo.em.dao.EmployeesDAO;
 import com.kspt.khandygo.em.dao.OutOfOfficesDAO;
 import com.kspt.khandygo.em.utils.Tuple2;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -20,10 +21,10 @@ public class OutOfOfficesService {
   private final OutOfOfficesDAO outOfOfficesDAO;
 
   public int create(
-      final Employee requester,
+      final @NonNull Employee requester,
       final long when,
       final long duration,
-      final String reason,
+      final @NonNull String reason,
       final int employeeId) {
     final Employee employee = employeesDAO.get(employeeId);
     Preconditions.checkState(requester.equals(employee));
@@ -31,13 +32,14 @@ public class OutOfOfficesService {
     return outOfOfficesDAO.save(outOfOffice);
   }
 
-  public void cancel(final Employee requester, final int id) {
+  public void cancel(final @NonNull Employee requester, final int id) {
     final OutOfOffice outOfOffice = outOfOfficesDAO.get(id);
     Preconditions.checkState(requester.equals(outOfOffice.employee()));
     final OutOfOffice cancelledVocation = outOfOffice.cancel();
     outOfOfficesDAO.update(id, cancelledVocation);
   }
 
+  @NonNull
   public List<Tuple2<Integer, OutOfOffice>> approvedFor(final int employeeId) {
     return outOfOfficesDAO.approvedFor(employeeId);
   }

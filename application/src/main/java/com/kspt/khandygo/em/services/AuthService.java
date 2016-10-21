@@ -5,6 +5,7 @@ import com.kspt.khandygo.em.dao.AuthDAO;
 import com.kspt.khandygo.em.utils.Tuple2;
 import static java.util.Objects.requireNonNull;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Map;
@@ -19,15 +20,17 @@ public class AuthService {
 
   private final AuthDAO authDAO;
 
-  public Employee employeeBySession(final String session) {
+  @NonNull
+  public Employee employeeBySession(final @NonNull String session) {
     return requireNonNull(authorizedUsers.get(session)._2);
   }
 
-  public Integer employeeIdBySession(final String session) {
+  public int employeeIdBySession(final @NonNull String session) {
     return requireNonNull(authorizedUsers.get(session)._1);
   }
 
-  public String auth(final String login, final String password) {
+  @NonNull
+  public String auth(final @NonNull String login, final @NonNull String password) {
     final Tuple2<Integer, Employee> userWithId = authDAO.get(login, password);
     if (authorizedUsers.containsValue(userWithId))
       return authorizedUsers.entrySet().stream()

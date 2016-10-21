@@ -6,8 +6,6 @@ import com.kspt.khandygo.em.core.Vocation;
 import com.kspt.khandygo.em.services.AuthService;
 import com.kspt.khandygo.em.services.VocationsService;
 import com.kspt.khandygo.em.utils.Tuple2;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import static java.util.stream.Collectors.toList;
 import lombok.AllArgsConstructor;
 import javax.inject.Inject;
@@ -25,7 +23,6 @@ import java.util.List;
 @Path("/vocations")
 @Produces(MediaType.APPLICATION_JSON)
 @AllArgsConstructor(onConstructor = @__({@Inject}))
-@Api(value = "/vocations")
 public class VocationsResource {
 
   private final AuthService authService;
@@ -34,7 +31,6 @@ public class VocationsResource {
 
   @Path("/approved")
   @GET
-  @ApiOperation(value = "get approved vocations for employee.")
   public List<VocationRepresentation> get(final @HeaderParam("session_id") String session) {
     final int requesterId = authService.employeeIdBySession(session);
     final List<Tuple2<Integer, Vocation>> awards = vocationsService.approvedFor(requesterId);
@@ -49,7 +45,6 @@ public class VocationsResource {
 
   @Path("/pending/inbox")
   @GET
-  @ApiOperation(value = "get pending vocations awaiting for employee decision.")
   public List<VocationRepresentation> getPendingInbox(
       final @HeaderParam("session_id") String session) {
     final int requesterId = authService.employeeIdBySession(session);
@@ -59,7 +54,6 @@ public class VocationsResource {
 
   @Path("/pending/outbox")
   @GET
-  @ApiOperation(value = "get pending vocations proposed by employee.")
   public List<VocationRepresentation> getPendingOutbox(
       final @HeaderParam("session_id") String session) {
     final int requesterId = authService.employeeIdBySession(session);
@@ -69,7 +63,6 @@ public class VocationsResource {
 
   @Path("/propose")
   @POST
-  @ApiOperation(value = "propose vocation.")
   public VocationProposed propose(
       final @HeaderParam("session_id") String session,
       final @FormParam("when") long when,
@@ -82,7 +75,6 @@ public class VocationsResource {
 
   @Path("/{vocation_id}/approve")
   @POST
-  @ApiOperation(value = "approve vocation.")
   public VocationApproved approve(
       final @HeaderParam("session_id") String session,
       final @PathParam("vocation_id") int vocationId) {
@@ -93,7 +85,6 @@ public class VocationsResource {
 
   @Path("/{vocation_id}/reject")
   @POST
-  @ApiOperation(value = "reject vocation.")
   public VocationRejected reject(
       final @HeaderParam("session_id") String session,
       final @PathParam("vocation_id") int vocationId) {
@@ -104,7 +95,6 @@ public class VocationsResource {
 
   @Path("/{vocation_id}/cancel")
   @DELETE
-  @ApiOperation(value = "cancel vocation.")
   public VocationCancelled cancel(
       final @HeaderParam("session_id") String session,
       final @PathParam("vocation_id") int vocationId) {

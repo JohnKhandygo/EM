@@ -9,6 +9,7 @@ import com.kspt.khandygo.em.utils.Tuple2;
 import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -21,10 +22,12 @@ public class AwardsService {
 
   private final AwardsDAO awardsDAO;
 
+  @NonNull
   public List<Tuple2<Integer, Award>> approvedFor(final int employeeId) {
     return awardsDAO.approvedFor(employeeId);
   }
 
+  @NonNull
   public List<Tuple2<Integer, Award>> pendingInboxFor(final int employeeId) {
     return employeesDAO.getAllMasteredBy(employeeId).stream()
         .map(t2 -> t2._1)
@@ -34,6 +37,7 @@ public class AwardsService {
         .collect(toList());
   }
 
+  @NonNull
   public List<Tuple2<Integer, Award>> pendingOutboxFor(final int employeeId) {
     return employeesDAO.getAllUnderThePatronageOf(employeeId).stream()
         .map(t2 -> t2._1)
@@ -43,14 +47,8 @@ public class AwardsService {
         .collect(toList());
   }
 
-  /*public Award get(final Employee requester, final int awardId) {
-    final Award award = awardsDAO.get(awardId);
-    Preconditions.checkState(requester.equals(award.employee()));
-    return award;
-  }*/
-
   public int propose(
-      final Employee requester,
+      final @NonNull Employee requester,
       final long when,
       final long duration,
       final int employeeId) {
@@ -60,19 +58,19 @@ public class AwardsService {
     return awardsDAO.save(award);
   }
 
-  public void approve(final Employee requester, final int id) {
+  public void approve(final @NonNull Employee requester, final int id) {
     final Award award = awardsDAO.get(id);
     Preconditions.checkState(requester.equals(award.employee().paymaster()));
     awardsDAO.update(id, award.approve());
   }
 
-  public void reject(final Employee requester, final int id) {
+  public void reject(final @NonNull Employee requester, final int id) {
     final Award award = awardsDAO.get(id);
     Preconditions.checkState(requester.equals(award.employee().paymaster()));
     awardsDAO.update(id, award.reject());
   }
 
-  public void cancel(final Employee requester, final int id) {
+  public void cancel(final @NonNull Employee requester, final int id) {
     final Award award = awardsDAO.get(id);
     Preconditions.checkState(requester.equals(award.employee().manager()));
     awardsDAO.update(id, award.cancel());

@@ -6,8 +6,6 @@ import com.kspt.khandygo.em.core.Employee;
 import com.kspt.khandygo.em.services.AuthService;
 import com.kspt.khandygo.em.services.AwardsService;
 import com.kspt.khandygo.em.utils.Tuple2;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import static java.util.stream.Collectors.toList;
 import lombok.AllArgsConstructor;
 import javax.inject.Inject;
@@ -24,7 +22,6 @@ import java.util.List;
 @Path("/awards")
 @Produces(MediaType.APPLICATION_JSON)
 @AllArgsConstructor(onConstructor = @__({@Inject}))
-@Api(value = "/awards")
 public class AwardsResource {
 
   private final AuthService authService;
@@ -33,7 +30,6 @@ public class AwardsResource {
 
   @Path("/approved")
   @GET
-  @ApiOperation(value = "get approved awards for employee.")
   public List<AwardRepresentation> getApproved(final @HeaderParam("session_id") String session) {
     final int requesterId = authService.employeeIdBySession(session);
     final List<Tuple2<Integer, Award>> awards = awardsService.approvedFor(requesterId);
@@ -48,7 +44,6 @@ public class AwardsResource {
 
   @Path("/pending/inbox")
   @GET
-  @ApiOperation(value = "get pending awards awaiting for employee decision.")
   public List<AwardRepresentation> getPendingInbox(
       final @HeaderParam("session_id") String session) {
     final int requesterId = authService.employeeIdBySession(session);
@@ -58,7 +53,6 @@ public class AwardsResource {
 
   @Path("/pending/outbox")
   @GET
-  @ApiOperation(value = "get pending awards proposed by employee.")
   public List<AwardRepresentation> getPendingOutbox(
       final @HeaderParam("session_id") String session) {
     final int requesterId = authService.employeeIdBySession(session);
@@ -68,7 +62,6 @@ public class AwardsResource {
 
   @Path("/propose")
   @POST
-  @ApiOperation(value = "propose award.")
   public AwardProposed propose(
       final @HeaderParam("session_id") String session,
       final @FormParam("when") long when,
@@ -81,7 +74,6 @@ public class AwardsResource {
 
   @Path("/{award_id}/approve")
   @POST
-  @ApiOperation(value = "approve award.")
   public AwardApproved approve(
       final @HeaderParam("session_id") String session,
       final @PathParam("award_id") int awardId) {
@@ -92,7 +84,6 @@ public class AwardsResource {
 
   @Path("/{award_id}/reject")
   @POST
-  @ApiOperation(value = "reject award.")
   public AwardRejected reject(
       final @HeaderParam("session_id") String session,
       final @PathParam("award_id") int awardId) {
@@ -103,7 +94,6 @@ public class AwardsResource {
 
   @Path("/{award_id}/cancel")
   @POST
-  @ApiOperation(value = "cancel award.")
   public AwardCancelled cancel(
       final @HeaderParam("session_id") String session,
       final @PathParam("award_id") int awardId) {

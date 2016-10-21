@@ -27,6 +27,7 @@ public class AwardsDAO {
 
   private final EbeanServer ebean;
 
+  @NonNull
   public List<Tuple2<Integer, Award>> approvedFor(final int employeeId) {
     final List<AwardEntity> awardEntities = ebean.find(AwardEntity.class).where()
         .and(eq("employee_id", employeeId), eq("approved", 1))
@@ -98,6 +99,7 @@ public class AwardsDAO {
 
     private final Boolean cancelled;
 
+    @NonNull
     Award toAward() {
       return new Award(employee, timestamp, amount, approved, rejected, cancelled);
     }
@@ -116,6 +118,7 @@ public class AwardsDAO {
           award.cancelled());
     }
 
+    @NonNull
     static AwardEntity existedOne(final int id, final Award award) {
       Preconditions.checkState(award.employee() instanceof UserEntity,
           "There is no sufficient type information to save %s.", award);

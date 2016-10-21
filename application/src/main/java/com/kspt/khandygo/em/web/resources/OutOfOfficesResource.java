@@ -6,8 +6,6 @@ import com.kspt.khandygo.em.core.OutOfOffice;
 import com.kspt.khandygo.em.services.AuthService;
 import com.kspt.khandygo.em.services.OutOfOfficesService;
 import com.kspt.khandygo.em.utils.Tuple2;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import static java.util.stream.Collectors.toList;
 import lombok.AllArgsConstructor;
 import javax.inject.Inject;
@@ -25,7 +23,6 @@ import java.util.List;
 @Path("/out_of_offices")
 @Produces(MediaType.APPLICATION_JSON)
 @AllArgsConstructor(onConstructor = @__({@Inject}))
-@Api(value = "/out_of_offices")
 public class OutOfOfficesResource {
 
   private final AuthService authService;
@@ -34,7 +31,6 @@ public class OutOfOfficesResource {
 
   @Path("/approved")
   @GET
-  @ApiOperation(value = "get approved out of office reservations for employee.")
   public List<OutOfOfficeRepresentation> get(final @HeaderParam("session_id") String session) {
     final int requesterId = authService.employeeIdBySession(session);
     final List<Tuple2<Integer, OutOfOffice>> awards = outOfOfficesService.approvedFor(requesterId);
@@ -46,7 +42,6 @@ public class OutOfOfficesResource {
 
   @Path("/create")
   @POST
-  @ApiOperation(value = "create out of office.")
   public OutOfOfficeCreated create(
       final @HeaderParam("session_id") String session,
       final @FormParam("when") long when,
@@ -60,7 +55,6 @@ public class OutOfOfficesResource {
 
   @Path("/{out_of_office_id}/cancel")
   @DELETE
-  @ApiOperation(value = "cancel out of office.")
   public OutOfOfficeCancelled cancel(
       final @HeaderParam("session_id") String session,
       final @PathParam("out_of_office_id") int outOfOfficeId) {
