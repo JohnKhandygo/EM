@@ -48,14 +48,19 @@ public class GuiceModule extends AbstractModule {
     @NotNull
     private ServerConfig getServerConfig() {
       ServerConfig c = new ServerConfig();
-      c.setName("em-app-ebean-server");
+      c.setName("default");
+      c.setDefaultServer(true);
       c.setDataSourceConfig(getDataSourceConfig());
+      registerClasses(c);
+      return c;
+    }
+
+    private void registerClasses(final ServerConfig c) {
       c.addClass(UserEntity.class);
       c.addClass(AwardEntity.class);
       c.addClass(OutOfOfficeEntity.class);
       c.addClass(OutOfOfficeEntity.class);
       c.addClass(VocationEntity.class);
-      return c;
     }
 
     @NotNull
