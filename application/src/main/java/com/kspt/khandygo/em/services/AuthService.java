@@ -1,22 +1,16 @@
 package com.kspt.khandygo.em.services;
 
 import com.google.common.collect.Maps;
-import com.kspt.khandygo.em.GuiceInterceptor;
 import com.kspt.khandygo.em.core.Employee;
 import com.kspt.khandygo.em.dao.AuthDAO;
 import com.kspt.khandygo.em.utils.Tuple2;
 import static java.util.Objects.requireNonNull;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.interceptor.ExcludeDefaultInterceptors;
-import javax.interceptor.Interceptors;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;

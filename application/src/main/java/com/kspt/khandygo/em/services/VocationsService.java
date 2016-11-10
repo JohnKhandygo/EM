@@ -14,7 +14,6 @@ import lombok.NonNull;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 
 @AllArgsConstructor
