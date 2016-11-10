@@ -1,30 +1,10 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0"
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-
-    <!-- commons -->
-    <!--<context-param>
-        <param-name>resteasy.scan</param-name>
-        <param-value>true</param-value>
-    </context-param>-->
     <context-param>
         <param-name>resteasy.servlet.mapping.prefix</param-name>
         <param-value>/api</param-value>
     </context-param>
-    <!-- DI -->
-    <!--<context-param>
-        <param-name>resteasy.guice.modules</param-name>
-        <param-value>com.kspt.khandygo.em.GuiceModule</param-value>
-    </context-param>
-    <context-param>
-        <param-name>resteasy.guice.stage</param-name>
-        <param-value>PRODUCTION</param-value>
-    </context-param>
-    <listener>
-        <listener-class>
-            org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener
-        </listener-class>
-    </listener>-->
 
     <servlet>
         <servlet-name>resteasy-servlet</servlet-name>

@@ -9,18 +9,25 @@ import com.kspt.khandygo.em.utils.Tuple2;
 import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 
-@AllArgsConstructor(onConstructor = @__({@Inject}))
-@Singleton
+@AllArgsConstructor
+@NoArgsConstructor
+@Stateless
+@LocalBean
 public class VocationsService {
 
-  private final EmployeesDAO employeesDAO;
+  @Inject
+  private EmployeesDAO employeesDAO;
 
-  private final VocationsDAO vocationsDAO;
+  @Inject
+  private VocationsDAO vocationsDAO;
 
   public int propose(
       final @NonNull Employee requester,

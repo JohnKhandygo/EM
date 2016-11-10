@@ -4,6 +4,7 @@
             <module name="org.jboss.resteasy.resteasy-jackson-provider"/>
         </exclusions>
         <dependencies>
+            <module name="javax.ejb.api"/>
             <module name="javax.persistence.api"/>
             <module name="org.jboss.resteasy.resteasy-jackson2-provider" services="import"/>
         </dependencies>

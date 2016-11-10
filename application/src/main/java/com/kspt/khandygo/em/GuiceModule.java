@@ -28,11 +28,11 @@ public class GuiceModule extends AbstractModule {
     bind(EbeanServer.class).toProvider(EbeanProvider.class).in(Singleton.class);
   }
 
-  @Provides
+  /*@Provides
   @Singleton
   private AuthService provideAuthService(final AuthDAO authDAO) {
     return new AuthService(Maps.newConcurrentMap(), authDAO);
-  }
+  }*/
 
   private static class EbeanProvider implements Provider<EbeanServer> {
 

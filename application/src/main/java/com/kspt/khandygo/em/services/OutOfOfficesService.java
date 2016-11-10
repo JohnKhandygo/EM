@@ -7,18 +7,25 @@ import com.kspt.khandygo.em.dao.EmployeesDAO;
 import com.kspt.khandygo.em.dao.OutOfOfficesDAO;
 import com.kspt.khandygo.em.utils.Tuple2;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 
-@AllArgsConstructor(onConstructor = @__({@Inject}))
-@Singleton
+@AllArgsConstructor
+@NoArgsConstructor
+@Stateless
+@LocalBean
 public class OutOfOfficesService {
 
-  private final EmployeesDAO employeesDAO;
+  @Inject
+  private EmployeesDAO employeesDAO;
 
-  private final OutOfOfficesDAO outOfOfficesDAO;
+  @Inject
+  private OutOfOfficesDAO outOfOfficesDAO;
 
   public int create(
       final @NonNull Employee requester,
