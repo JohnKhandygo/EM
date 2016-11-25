@@ -32,7 +32,7 @@ class OutOfOffice {
   cancelled : boolean
 }
 
-class Vocation {
+class Vacation {
   employee : Employee
   when : long
   duration : long
@@ -44,7 +44,7 @@ class Vocation {
 
 Award "*" -down-> "1" Employee : "owned by >"
 OutOfOffice "*" -down-> "1" Employee : "owned by >"
-Vocation "*" -down-> "1" Employee : "owned by >"
+Vacation "*" -down-> "1" Employee : "owned by >"
 
 Worker -up-|> Employee
 Manager -down-|> Employee

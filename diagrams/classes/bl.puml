@@ -39,17 +39,17 @@ class OutOfOfficesService {
   + approvedFor(employeeId : int) : List<Tuple2<Integer, OutOfOffice>>
 }
 
-class VocationsService {
+class VacationsService {
   - employeesDAO EmployeesDAO;
-  - vocationsDAO VocationsDAO;
+  - vacationsDAO VacationsDAO;
 
   + propose(requester : Employee, when : long, duration : long, employeeId : int) : int
-  + approve(requester : Employee, vocationId : int) : void
-  + reject(requester : Employee, vocationId : int) : void
-  + cancel(requester : Employee, vocationId : int) : void
-  + approvedFor(employeeId : int) : List<Tuple2<Integer, Vocation>>
-  + pendingInboxFor(employeeId : int) : List<Tuple2<Integer, Vocation>>
-  + pendingOutboxFor(employeeId : int) : List<Tuple2<Integer, Vocation>>
+  + approve(requester : Employee, vacationId : int) : void
+  + reject(requester : Employee, vacationId : int) : void
+  + cancel(requester : Employee, vacationId : int) : void
+  + approvedFor(employeeId : int) : List<Tuple2<Integer, Vacation>>
+  + pendingInboxFor(employeeId : int) : List<Tuple2<Integer, Vacation>>
+  + pendingOutboxFor(employeeId : int) : List<Tuple2<Integer, Vacation>>
 }
 
 @enduml

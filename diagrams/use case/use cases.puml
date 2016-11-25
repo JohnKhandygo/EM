@@ -21,7 +21,7 @@ rectangle discussion {
 
 rectangle activity {
   (Propose Award) as pa
-  (Propose Vocation) as pv
+  (Propose Vacation) as pv
   (Reserve Out-of-Office) as rooo
 
   pa ..> d
