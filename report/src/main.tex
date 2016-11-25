@@ -1,0 +1,73 @@
+\documentclass[12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{mathtext}
+\usepackage{cmap}
+\usepackage{amsmath,amssymb,amsthm,amscd,amsfonts}
+\usepackage{graphicx}
+\usepackage[colorbox,usenames,dvipsnames]{xcolor}
+\usepackage{float, caption, subcaption, multirow}
+\usepackage[section]{minted}
+\usepackage{hyperref}
+\usepackage{bbm}
+
+\voffset -24.5mm
+\hoffset -5mm
+\textwidth 173mm
+\textheight 240mm
+\oddsidemargin=0mm \evensidemargin=0mm
+
+\definecolor{codegray}{gray}{0.9}
+\newcommand{\code}[1]{\colorbox{codegray}{\texttt{#1}}}
+\newmintinline[src]{console}{}
+\newmintinline[sql]{sql}{}
+
+\renewcommand{\theFancyVerbLine}{\sffamily\textcolor{black}{\scriptsize\oldstylenums{\arabic{FancyVerbLine}}}}
+\usemintedstyle[console]{bw}
+\setminted[console] {
+     bgcolor = codegray,
+     linenos = true,
+     tabsize = 2,
+     formatcom = \color{black},
+     frame = leftline,
+     framerule = 0.8pt,
+     framesep = 0.5cm,
+     xleftmargin = 1cm,
+     breaklines = true,
+     escapeinside=||
+}
+
+\setminted[sql] {
+     bgcolor = codegray,
+     linenos = true,
+     tabsize = 2,
+     formatcom = \color{black},
+     frame = leftline,
+     framerule = 0.8pt,
+     framesep = 0.5cm,
+     xleftmargin = 1cm,
+     breaklines = true,
+     escapeinside=||
+}
+
+\newcommand{\pcell}[2]{\parbox[c]{#1\textwidth}{\textbf{#2}}}
+
+\begin{document}
+
+\title{
+    Отчет по курсовой работе \\ 
+    Дисциплина \\ <<Моделирование вычислительных систем>>}
+\author{Евгений Хандыго, гр. 53501/3}
+
+\input{00_title}
+\tableofcontents
+\newpage
+
+\include{01_task_analysis}
+\include{02_implementation}
+\include{03_conclusion}
+
+\end{document}
